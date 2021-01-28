@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -33,6 +34,13 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    alert: {
+        marginTop:'15px',
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    }
 }));
 
 
@@ -41,14 +49,17 @@ const LoginComponent = props => {
     const classes = useStyles();
     const { register, handleSubmit } = useForm();
     const history = useHistory();
+    const [error, setError] = useState(false);
 
     const onSubmit = async data => {
         try {
             const response = await axiosService.send({ method: "post", url: SIGNIN_USER_API, data });
             localStorageService.saveUser(response.data);
+            setError(false);
             history.push("/user-panel");
         } catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -105,6 +116,9 @@ const LoginComponent = props => {
                         </Grid>
                     </Grid>
                 </form>
+                <div className={classes.alert}>
+                    {error && <Alert severity="error" onClose={() => setError(false)}>{error}</Alert>}
+                </div>
             </div>
         </Container >
     );

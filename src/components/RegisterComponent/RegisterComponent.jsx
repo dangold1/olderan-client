@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { REGISTER_USER_API } from '../../utils/keys';
 import { Grid } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { Link } from "react-router-dom";
 import axiosService from '../../services/axios.service';
 import localStorageService from '../../services/localStorage.sevice';
@@ -32,12 +33,20 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    alert: {
+        marginTop:'15px',
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    }
 }));
 
 const RegisterComponent = props => {
     const classes = useStyles();
     const history = useHistory();
     const { register, handleSubmit } = useForm();
+    const [error, setError] = useState(false);
 
     const onSubmit = async data => {
         data.role = "user";
@@ -47,9 +56,9 @@ const RegisterComponent = props => {
             history.push("/user-panel");
         } catch (err) {
             console.error(err);
+            setError(err.message);
         }
     }
-
 
     return (
         <Container component="main" maxWidth="xs">
@@ -111,6 +120,9 @@ const RegisterComponent = props => {
                         </Grid>
                     </Grid>
                 </form>
+                <div className={classes.alert}>
+                    {error && <Alert severity="error" onClose={() => setError(false)}>{error}</Alert>}
+                </div>
             </div>
         </Container>
     );

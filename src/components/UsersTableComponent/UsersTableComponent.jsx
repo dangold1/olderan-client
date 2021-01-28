@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
     table: {
-        minWidth: 650,
+        width: '100%',
     },
 });
 
@@ -22,22 +22,22 @@ const UsersTable = props => {
             <Table className={classes.table} aria-label="users table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Nickname</TableCell>
                         <TableCell>Username</TableCell>
-                        <TableCell>Password</TableCell>
+                        <TableCell>Nickname</TableCell>
                         <TableCell>Role</TableCell>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Password</TableCell>
 
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {users.map((user) => (
                         <TableRow key={user._id}>
-                            <TableCell component="th" scope="row">{user._id}</TableCell>
+                            <TableCell component="th" scope="row">{user.username}</TableCell>
                             <TableCell>{user.nickname}</TableCell>
-                            <TableCell>{user.username}</TableCell>
-                            <TableCell>{user.password}</TableCell>
                             <TableCell>{user.role}</TableCell>
+                            <TableCell>{user._id}</TableCell>
+                            <TableCell>{user.password}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
